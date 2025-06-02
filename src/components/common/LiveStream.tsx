@@ -20,10 +20,10 @@ const LiveStream: React.FC<LiveStreamProps> = ({ className }) => {
         
         <div className="relative pt-[56.25%] overflow-hidden rounded-lg bg-gray-900">
           <iframe
-            src="https://player.kick.com/win-win-syndicate"
+            src="https://player.kick.com/khamitzhan"
             className="absolute inset-0 w-full h-full"
             allowFullScreen
-            title="Win-Win Syndicate Live Stream"
+            title="Khamitzhan Live Stream"
             onError={(e) => {
               const iframe = e.target as HTMLIFrameElement;
               const parent = iframe.parentElement;
@@ -43,8 +43,8 @@ const LiveStream: React.FC<LiveStreamProps> = ({ className }) => {
         
         <div className="mt-3 flex justify-between items-center">
           <div>
-            <h3 className="font-semibold">Win-Win Syndicate LIVE</h3>
-            <p className="text-sm text-gray-400">Hosted by CryptoMaster</p>
+            <h3 className="font-semibold">Khamitzhan LIVE</h3>
+            <p className="text-sm text-gray-400">Hosted by Khamitzhan</p>
           </div>
           <div className="text-right">
             <p className="text-sm text-gray-400">
