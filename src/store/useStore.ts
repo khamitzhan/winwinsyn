@@ -2,7 +2,7 @@ import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import { User, Draw, Participant, Network, WalletBalance } from '../types';
 import { generateMockUser } from '../utils/mockData';
-import { TatumService } from '../services/tatum';
+import { BtcpayService } from '../services/btcpayService';
 
 interface StoreState {
   user: User;
@@ -13,7 +13,7 @@ interface StoreState {
   selectedNetwork: Network;
   walletBalances: WalletBalance[];
   isLoadingBalance: boolean;
-  
+
   // Actions
   joinDraw: () => boolean;
   completeDrawAndSelectWinner: () => void;
@@ -47,7 +47,7 @@ export const useStore = create<StoreState>()(
 
       createWallet: async (network: Network) => {
         try {
-          const response = await TatumService.createWallet(network);
+          const response = await BtcpayService.createWallet(network);
           set(state => ({
             user: {
               ...state.user,
@@ -66,16 +66,16 @@ export const useStore = create<StoreState>()(
       refreshBalance: async (network: Network) => {
         const { user } = get();
         const address = user.wallets[network];
-        
+
         if (!address) {
-          console.error('No wallet address found for network:', network);
+          console.error(`No wallet address found for network: ${network}`);
           return;
         }
 
         set({ isLoadingBalance: true });
-        
+
         try {
-          const balance = await TatumService.getBalance(address, network);
+          const balance = await BtcpayService.getBalance(address, network);
           set(state => ({
             walletBalances: [
               ...state.walletBalances.filter(b => b.network !== network),
@@ -91,15 +91,15 @@ export const useStore = create<StoreState>()(
 
       joinDraw: () => {
         const { user, participants } = get();
-        
+
         if (user.balance < 1) {
           return false;
         }
-        
+
         if (participants.some(p => p.userId === user.id)) {
           return false;
         }
-        
+
         set(state => ({
           user: {
             ...state.user,
@@ -120,25 +120,25 @@ export const useStore = create<StoreState>()(
             totalPool: state.currentDraw.totalPool + 1,
           }
         }));
-        
+
         return true;
       },
-      
+
       completeDrawAndSelectWinner: () => {
         const { currentDraw, participants, user } = get();
-        
+
         if (participants.length === 0) {
           get().resetDraw();
           return;
         }
-        
+
         const winnerIndex = Math.floor(Math.random() * participants.length);
         const winner = participants[winnerIndex];
-        
+
         // Winner gets 90% of the pool
         const totalPool = currentDraw.totalPool;
         const prize = totalPool * 0.9;
-        
+
         let updatedUser = user;
         if (winner.userId === user.id) {
           updatedUser = {
@@ -148,13 +148,13 @@ export const useStore = create<StoreState>()(
             totalWinnings: user.totalWinnings + prize,
           };
         }
-        
+
         const completedDraw = {
           ...currentDraw,
           winner: winner.userId,
           prize,
         };
-        
+
         set(state => ({
           user: updatedUser,
           drawHistory: [completedDraw, ...state.drawHistory].slice(0, 10),
@@ -170,7 +170,7 @@ export const useStore = create<StoreState>()(
           nextDrawTime: Date.now() + DRAW_DURATION,
         }));
       },
-      
+
       resetDraw: () => {
         set({
           currentDraw: {
@@ -185,11 +185,11 @@ export const useStore = create<StoreState>()(
           nextDrawTime: Date.now() + DRAW_DURATION,
         });
       },
-      
+
       setSelectedNetwork: (network: Network) => {
         set({ selectedNetwork: network });
       },
-      
+
       updateBalance: (amount: number) => {
         set(state => ({
           user: {
