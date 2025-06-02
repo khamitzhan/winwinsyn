@@ -4,6 +4,7 @@ import MainLayout from './components/layout/MainLayout';
 import Home from './pages/Home';
 import Deposit from './pages/Deposit';
 import Profile from './pages/Profile';
+import PrizeDraw from './pages/PrizeDraw';
 
 function App() {
   return (
@@ -13,6 +14,7 @@ function App() {
           <Route index element={<Home />} />
           <Route path="deposit" element={<Deposit />} />
           <Route path="profile" element={<Profile />} />
+          <Route path="prizedraw" element={<PrizeDraw />} />
         </Route>
       </Routes>
     </Router>
