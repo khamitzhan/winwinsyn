@@ -28,8 +28,20 @@ const DepositForm: React.FC = () => {
         timestamp: new Date().toLocaleString(),
       };
 
-      // Сохраняем транзакцию в localStorage (здесь один последний депозит)
-      localStorage.setItem('lastDeposit', JSON.stringify(newTx));
+      // Получаем текущую историю из localStorage
+      const historyStr = localStorage.getItem('depositHistory');
+      let history = historyStr ? JSON.parse(historyStr) : [];
+
+      // Добавляем новый депозит в начало массива
+      history.unshift(newTx);
+
+      // Оставляем максимум 20 записей
+      if (history.length > 20) {
+        history = history.slice(0, 20);
+      }
+
+      // Сохраняем обратно
+      localStorage.setItem('depositHistory', JSON.stringify(history));
 
       setIsProcessing(false);
       setShowSuccess(true);
@@ -117,4 +129,5 @@ const DepositForm: React.FC = () => {
 };
 
 export default DepositForm;
+
 
