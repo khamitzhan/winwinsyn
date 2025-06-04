@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Wallet, ChevronsUp, Check, Copy } from 'lucide-react';
+import { Wallet, ChevronsUp, Check } from 'lucide-react';
 import Card from '../common/Card';
 import Button from '../common/Button';
 import WalletDisplay from '../common/WalletDisplay';
@@ -19,7 +19,7 @@ const DepositForm: React.FC = () => {
     setIsProcessing(true);
     
     setTimeout(() => {
-      updateBalance(10); // Add 10 USDT to balance
+      updateBalance(10); // Добавляем 10 USDT к балансу
       setIsProcessing(false);
       setShowSuccess(true);
       
