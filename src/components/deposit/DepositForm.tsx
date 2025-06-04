@@ -20,6 +20,17 @@ const DepositForm: React.FC = () => {
     
     setTimeout(() => {
       updateBalance(10); // Добавляем 10 USDT к балансу
+
+      // Создаём объект транзакции
+      const newTx = {
+        txId: Math.random().toString(36).substring(2, 10).toUpperCase(),
+        amount: 10,
+        timestamp: new Date().toLocaleString(),
+      };
+
+      // Сохраняем транзакцию в localStorage (здесь один последний депозит)
+      localStorage.setItem('lastDeposit', JSON.stringify(newTx));
+
       setIsProcessing(false);
       setShowSuccess(true);
       
@@ -106,3 +117,4 @@ const DepositForm: React.FC = () => {
 };
 
 export default DepositForm;
+
